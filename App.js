@@ -7,14 +7,14 @@ import profileScreen from './src/screen/profileScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeDetailScreen from './src/screen/HomeDetailScreen';
+import profileDetailScreen from './src/screen/profileDetailScreen';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
-
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator
+function MyHomeStack(){
+  return(
+<Stack.Navigator
       initialRouteName='Home'
       screenOptions={{
         headerStyle: {backgroundColor:'blue'},
@@ -22,11 +22,29 @@ export default function App() {
         headerTintColor:'white'
       }}>
         <Stack.Screen name="Home" component={homeScreen} />
-        <Stack.Screen name="HomeDetailScreen" component={HomeDetailScreen} options={'My Detail'}/>
-      </Stack.Navigator>
+        <Stack.Screen name="HomeDetailScreen" component={HomeDetailScreen} options={{title:'My Detail'}}/>
+      </Stack.Navigator> 
+  )
+}
+ function MyProfileStack(){
+  return(
+    <Stack.Navigator
+          initialRouteName='Profile'
+          screenOptions={{
+            headerStyle: {backgroundColor:'blue'},
+            headerBackTitle:'返回2',
+            headerTintColor:'white'
+          }}>
+            <Stack.Screen name="profile" component={profileScreen} />
+            <Stack.Screen name="profileDetailScreen" component={profileDetailScreen} options={{title:'My Detail2'}}/>
+          </Stack.Navigator> 
+      )
+ }
 
-
-      {/* <Tab.Navigator 
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Tab.Navigator 
       initialRouteName='Settings'
       screenOptions={({route})=>({
         tabBarIcon: ({color, focused})=>{
@@ -54,9 +72,9 @@ export default function App() {
         inactiveTintColor:'gray'
       }}
       >
-        <Tab.Screen name="Home" component={homeScreen} />
-        <Tab.Screen name="Settings" component={profileScreen} />
-      </Tab.Navigator> */}
+        <Tab.Screen name="Home" component={MyHomeStack} />
+        <Tab.Screen name="Settings" component={MyProfileStack} />
+      </Tab.Navigator>
 
     </NavigationContainer>
 
