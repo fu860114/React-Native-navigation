@@ -2,19 +2,22 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
 export default function HomeDetailScreen(props) {
+  const passProps=props.route.params.passProps||'nothing get'
   return (
     <View style={styles.container}>
       <Text>home detail screen</Text>
-      <Button
+      <Text>{passProps.note}</Text>
+      {/* <Button
       title='go back'
       onPress={()=>props.navigation.pop()}/>
       <StatusBar style="auto" />
       <Text>{props.route.params.name|| 'nothing get'}</Text>
-      {/* nothing get 為預設default， 當home screen沒回傳值時使用*/}
+      nothing get 為預設default， 當home screen沒回傳值時使用 */}
 
-      <Button
+      {/* <Button
       title='change first page food'
-      onPress={()=>props.route.params.functionA('Apple')}/>
+      onPress={()=>props.route.params.functionA('Apple')}/> */}
+
     </View>
   );
 }
