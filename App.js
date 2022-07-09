@@ -9,6 +9,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeDetailScreen from './src/screen/HomeDetailScreen';
 import profileDetailScreen from './src/screen/profileDetailScreen';
 
+//for redux
+import createStore from './src/redux/store';
+import { StoreContext } from 'redux-react-hook';
+
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -41,7 +46,7 @@ function MyHomeStack(){
       )
  }
 
-export default function App() {
+function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator 
@@ -90,3 +95,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default MyApp = ()=>(
+  <StoreContext.Provider value={store}>
+    <App/>
+  </StoreContext.Provider>
+)

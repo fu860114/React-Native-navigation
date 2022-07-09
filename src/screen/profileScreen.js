@@ -1,30 +1,36 @@
 import React, {useState,useEffect} from 'react';
 import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 import * as StorageHelper from '../helper/StorageHelper.js'
+import { useMappedState, useDispatch } from 'redux-react-hook';
+import { changeName } from '../redux/action.js';
+
 
 export default function profileScreen(props) {
   const [name, setName]=useState('User')
-useEffect(()=>{
-  loadStorage()
-  console.log('useEffect')
-},[])
+  const myNewName = useMappedState(state=>state.newName)
+  const dispatch=useDispatch()
 
-  const loadStorage =async()=>{
-    let nameGet = await StorageHelper.getMySetting('name')
+// useEffect(()=>{
+//   loadStorage()
+//   console.log('useEffect')
+// },[])
 
-    console.log('loadStorage')
-    if (nameGet){ //if (name!==null)
-      setName(nameGet)
-    }
-  }
-const changeName = async()=>{
-  try{
-    await StorageHelper.setMySetting('name',name)
-  }catch{
-console.error(error)
-  }
+//   const loadStorage =async()=>{
+//     let nameGet = await StorageHelper.getMySetting('name')
+      
+//     console.log('loadStorage')
+//     if (nameGet){ //if (name!==null)
+//       setName(nameGet)
+//     }
+//   }
+// const changeName = async()=>{
+//   try{
+//     await StorageHelper.setMySetting('name',name)
+//   }catch{
+// console.error(error)
+//   }
  
-}
+// }
   return (
     <View style={styles.container}>
       <Text>profile screen</Text>
@@ -34,13 +40,18 @@ console.error(error)
       onChangeText={(text)=>setName(text)}
       value={name}
       />
-      <Text>Hello {name}</Text>
+      {/* <Text>Hello {name}</Text> */}
+      <Text>Hello {myNewName}</Text>
       {/* <Button 
       title='go to profile detail screen'
       onPress={()=>props.navigation.push('profileDetailScreen')}/> */}
-      <Button 
+      {/* <Button 
       title='set name'
-      onPress={()=>changeName()}/>
+      onPress={()=>changeName()}/> */}
+      <Button
+      title='redux set name'
+      onPress={()=>dispatch(changeName(name))}
+      />
     </View>
   );
 }
