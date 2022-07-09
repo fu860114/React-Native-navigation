@@ -57,9 +57,23 @@ export default function homeScreen(props) {
     setFood(foodGet)
   }
 useEffect(()=>{
-  var book =MOCKED_DATA
-  setDataSource(book)
-})
+  // var book =MOCKED_DATA
+  // setDataSource(book)
+  fetchData()
+},[])
+
+const fetchData =()=>{
+  const REQUEST_URL ='https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL'
+  fetch(REQUEST_URL)
+  .then((response)=>response.json())
+  .then((respnseData)=>{
+    setDataSource(respnseData)
+  })
+  .catch((err)=>{
+    console.log('error is', err);
+  })
+}
+
 const showNoticeDetail=(cases)=>{
   props.navigation.push('HomeDetailScreen', {passProps:cases})
 }
@@ -70,13 +84,18 @@ const renderBook=(cases)=>{
       <View>
       <View style={styles.MainView}>
         {/* <Image/> */}
+        <Image source={{uri:cases.album_file?cases.album_file:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png'}} style={styles.thumbnail}/>
+
         <View style={{flex:1}}>
           <Text ellipsizeMode='tail' numberOfLines={3} style={{color:'black', fontSize:15, marginTop:8}}>
-            {cases.note}
+            {cases.animal_place}
           </Text>
           <Text ellipsizeMode='tail' numberOfLines={3} style={{fontSize:13, marginButtom:8}}>
-            {cases.date}
+            {cases.animal_bodytype==='MEDIUM'?'中型':
+            cases.animal_bodytype==='SMALL'?'小型':'大型'
+            }{'/'+cases.animal_colour+'的'+cases.animal_kind}
           </Text>
+
         </View>
         <Image source={require('../../assets/img/ic_arrow_right.png')} style={styles.image}/>
         </View>
@@ -126,5 +145,10 @@ padding:8
   image:{
 height:30,
 width:30
+  },
+  thumbnail:{
+    width:50,
+    height:60,
+    marginRight:10
   }
 });

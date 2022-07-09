@@ -15,9 +15,10 @@ const Stack = createStackNavigator();
 function MyHomeStack(){
   return(
 <Stack.Navigator
+    
       initialRouteName='Home'
       screenOptions={{
-        headerStyle: {backgroundColor:'blue'},
+        headerStyle: {backgroundColor:'#75BBC4'},
         headerBackTitle:'返回',
         headerTintColor:'white'
       }}>
@@ -31,7 +32,7 @@ function MyHomeStack(){
     <Stack.Navigator
           initialRouteName='Profile'
           screenOptions={{
-            headerStyle: {backgroundColor:'blue'},
+            headerStyle: {backgroundColor:'#75BBC4'},
             headerBackTitle:'返回2',
             headerTintColor:'white'
           }}>
@@ -45,7 +46,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator 
-      initialRouteName='Settings'
+      initialRouteName='Home'
       screenOptions={({route})=>({
         tabBarIcon: ({color, focused})=>{
           // if (route.name =='Home'){
@@ -68,12 +69,12 @@ export default function App() {
 
       })}
       tabBarOptions={{
-        activeTintColor:'tomato',
+        activeTintColor:'#75BBC4',
         inactiveTintColor:'gray'
       }}
       >
-        <Tab.Screen name="Home" component={MyHomeStack} />
-        <Tab.Screen name="Settings" component={MyProfileStack} />
+        <Tab.Screen name="Home" component={MyHomeStack} options={{headerShown: false}}/>
+        <Tab.Screen name="Settings" component={MyProfileStack} options={{headerShown: false}}/>
       </Tab.Navigator>
 
     </NavigationContainer>
