@@ -18,13 +18,19 @@ useEffect(()=>{
     let bookGet =await StorageHelper.getMySetting('mylist')
 
     //法1
+    // let a =JSON.parse(bookGet)
+    // let newArray =[]
+    // a.forEach((thing)=>{
+    //   newArray.push(thing.animal_colour +'的'+thing.animal_kind)
+    // });
+    // setMyBookCount(a.length)
+    // setMyBookListName(newArray)
+
+    //法2
     let a =JSON.parse(bookGet)
-    let newArray =[]
-    a.forEach((thing)=>{
-      newArray.push(thing.animal_colour +'的'+thing.animal_kind)
-    });
     setMyBookCount(a.length)
-    setMyBookListName(newArray)
+    setMyBookListName(a)
+
   }
 
 //   const [name, setName]=useState('User')
@@ -53,9 +59,15 @@ useEffect(()=>{
     <View style={styles.container}>
       <Text>我的寵物{myBookCount}個</Text>
     {/* 法1渲染 */}
-{
+{/* {
   myBookListName.map((pet, index)=>{
     return(<Text key={index}>認樣寵物為：{pet}</Text>)
+  })
+} */}
+{/* 法2渲染 */}
+{
+  myBookListName.map((pet, index)=>{
+    return(<Text key={index}>認樣寵物為：{pet.animal_colour+'的'+pet.animal_kind}</Text>)
   })
 }
 
