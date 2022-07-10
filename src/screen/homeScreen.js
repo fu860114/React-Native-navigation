@@ -1,6 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, FlatList, TouchableOpacity, Image } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import * as StorageHelper from '../helper/StorageHelper'
+
 var MOCKED_DATA=[
   {
     id:'1',
@@ -62,6 +64,25 @@ useEffect(()=>{
   fetchData()
 },[])
 
+useEffect(()=>{
+  let getAll=[]
+  dataSource.map(a=>{
+    if(a.addToMyList===true){
+      getAll.push(a)
+    }
+  })
+  saveToStorage(getAll)
+})
+
+const saveToStorage=async(getMyBook)=>{
+  try{
+    await StorageHelper.setMySetting('mylist', JSON.stringify(getMyBook))
+  }catch(err){
+    console.log(err)
+  }
+  
+}
+
 const fetchData =()=>{
   const REQUEST_URL ='https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL'
   fetch(REQUEST_URL)
@@ -77,12 +98,27 @@ const fetchData =()=>{
 const showNoticeDetail=(cases)=>{
   props.navigation.push('HomeDetailScreen', {passProps:cases})
 }
+const pressRow=(cases)=>{
+  const newData= dataSource.map(a=>{
+    let copyA={...a}
+    if (copyA.animal_id===cases.animal_id){
+      copyA.addToMyList=!copyA.addToMyList
+    }
+    return copyA
+  }
+    
+  )
+  setDataSource(newData)
+}
 
 const renderBook=(cases)=>{
   return(
     <TouchableOpacity onPress={()=>showNoticeDetail(cases)}>
       <View>
       <View style={styles.MainView}>
+        <TouchableOpacity onPress={()=>pressRow(cases)}>
+          {cases.addToMyList===true?<Image style ={styles.imageCheck} source={require('../image/下載.png')}/>:<Image style ={styles.imageCheck} source={require('../image/notcheck.png')}/>}
+        </TouchableOpacity>
         {/* <Image/> */}
         <Image source={{uri:cases.album_file?cases.album_file:'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png'}} style={styles.thumbnail}/>
 
@@ -90,7 +126,7 @@ const renderBook=(cases)=>{
           <Text ellipsizeMode='tail' numberOfLines={3} style={{color:'black', fontSize:15, marginTop:8}}>
             {cases.animal_place}
           </Text>
-          <Text ellipsizeMode='tail' numberOfLines={3} style={{fontSize:13, marginButtom:8}}>
+          <Text ellipsizeMode='tail' numberOfLines={3} style={  {fontSize:13, marginButtom:8}}>
             {cases.animal_bodytype==='MEDIUM'?'中型':
             cases.animal_bodytype==='SMALL'?'小型':'大型'
             }{'/'+cases.animal_colour+'的'+cases.animal_kind}
@@ -116,7 +152,7 @@ const renderBook=(cases)=>{
       <FlatList
       data={dataSource}
       renderItem={cases=>renderBook(cases.item)}
-      keyExtractor={cases=>cases.id}
+      keyExtractor={cases=>cases.animal_id.toString()}
       style={{backgroundColor:'white'}}
       />
     </View>
@@ -149,6 +185,11 @@ width:30
   thumbnail:{
     width:50,
     height:60,
+    marginRight:10
+  },
+  imageCheck:{
+    width:25,
+    height:25,
     marginRight:10
   }
 });
